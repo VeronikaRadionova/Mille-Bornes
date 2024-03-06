@@ -8,6 +8,13 @@ public class FinLimite extends Limite {
 
 	@Override
 	public String toString() {
-		return "Fin Limite de vitesse: " + nombre;
+		return "Fin Limite de vitesse";
+	}
+	
+	public boolean equals(Object obj) {
+		if (obj instanceof FinLimite) {
+			return true;
+		}
+		return false;
 	}
 }
