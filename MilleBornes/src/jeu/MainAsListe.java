@@ -10,8 +10,13 @@ public class MainAsListe implements Main {
 	protected List<Carte> listeMain;
 	
 	
-	public MainAsListe(List<Carte> listeMain) {
-		listeMain = new ArrayList <Carte>();
+	public MainAsListe() {
+		this.listeMain = new ArrayList <Carte>();
+	}
+	
+	@Override
+	public Iterator<Carte> iterateur() {
+		return null;
 	}
 
 	@Override
@@ -27,9 +32,6 @@ public class MainAsListe implements Main {
 		listeMain.remove(carte);
 	}
 
-	@Override
-	public Iterator<Carte> iterateur() {
-		return null;
-	}
+	
 
 }

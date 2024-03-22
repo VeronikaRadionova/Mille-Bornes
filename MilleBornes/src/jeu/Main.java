@@ -6,11 +6,13 @@ import cartes.Carte;
 
 public interface Main {
 	
+	Iterator<Carte> iterateur();
+	
 	public void prendre(Carte carte);
 	
 	public void jouer(Carte carte);
 	
-	Iterator<Carte> iterateur();
+	
 	
 
 }
