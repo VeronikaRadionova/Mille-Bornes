@@ -42,7 +42,7 @@ public class TestTP2 {
 		
 		System.out.println("TEST des méthodes 'getListeCartes' et 'checkCount':\n");
 		
-		// getListeCartes
+		// getListeCartes - la liste devient aussi mélandée après la modification du constructeur JeuDeCartes
 		JeuDeCartes cartes = new JeuDeCartes();
 		System.out.println("Toutes les cartes:\n");
 		List <Carte> toutesCartes = cartes.getListeCartes();
@@ -51,7 +51,7 @@ public class TestTP2 {
 		}
 		
 		// checkCount
-		System.out.println("\nVérification des quantités d'exeplaires pour toutes les cartes: " + cartes.checkCount() + "\n\n");
+		System.out.println("\nVérification des quantités d'exemplaires pour toutes les cartes: " + cartes.checkCount() + "\n\n");
 		
 		
 		System.out.println("TEST des méthodes 'melanger', 'rassembler' et 'verifierRassemblement':\n");
@@ -68,27 +68,40 @@ public class TestTP2 {
 		// sur des tableaux proposés
 		Integer[] tableau0 = {};
         List<Integer> liste0 = Arrays.asList(tableau0);
-        System.out.println("[]: " /*+ Utils.verifierRassemblement(liste0)*/);
+        System.out.println("[]: " + Utils.verifierRassemblement(liste0));
         liste0 = Utils.rassembler(liste0);
-        System.out.println(liste0.toString() + ": " /*+ Utils.verifierRassemblement(liste0)*/ + "\n");
+        System.out.println(liste0.toString() + ": " + Utils.verifierRassemblement(liste0) + "\n");
         
 		Integer[] tableau1 = {1, 1, 2, 1, 3};
         List<Integer> liste1 = Arrays.asList(tableau1);
-        System.out.println("[1, 1, 2, 1, 3]: " /*+ Utils.verifierRassemblement(liste1)*/);
+        System.out.println("[1, 1, 2, 1, 3]: " + Utils.verifierRassemblement(liste1));
         liste1 = Utils.rassembler(liste1);
-        System.out.println(liste1.toString() + ": " + /*Utils.verifierRassemblement(liste1) +*/ "\n");
+        System.out.println(liste1.toString() + ": " + Utils.verifierRassemblement(liste1) + "\n");
 		
         Integer[] tableau2 = {1, 4, 3, 2};
         List<Integer> liste2 = Arrays.asList(tableau2);
-        System.out.println("[1, 4, 3, 2]: " /*+ Utils.verifierRassemblement(liste2)*/);
+        System.out.println("[1, 4, 3, 2]: " + Utils.verifierRassemblement(liste2));
         liste2 = Utils.rassembler(liste2);
-        System.out.println(liste2.toString() + ": " + /*Utils.verifierRassemblement(liste2) +*/ "\n");
+        System.out.println(liste2.toString() + ": " + Utils.verifierRassemblement(liste2) + "\n");
         
         Integer[] tableau3 = {1, 1, 2, 3, 1};
         List<Integer> liste3 = Arrays.asList(tableau3);
-        System.out.println("[1, 1, 2, 3, 1]: " /*+ Utils.verifierRassemblement(liste3)*/);
+        System.out.println("[1, 1, 2, 3, 1]: " + Utils.verifierRassemblement(liste3));
         liste3 = Utils.rassembler(liste3);
-        System.out.println(liste3.toString() + ": " + /*Utils.verifierRassemblement(liste3) +*/ "\n");
+        System.out.println(liste3.toString() + ": " + Utils.verifierRassemblement(liste3) + "\n");
+        
+        
+        System.out.println("TEST d'un constructeur JeuDeCartes après l'ajout d'un méthode 'melanger':\n");
+        
+        JeuDeCartes cartes2 = new JeuDeCartes();
+		System.out.println("Toutes les cartes:\n");
+		List <Carte> toutesCartes2 = cartes2.getListeCartes();
+		for (int j = 0; j < toutesCartes2.size(); j++) {
+			System.out.println(toutesCartes2.get(j));
+		}
+		
+		// nombre d'occurences - checkCount
+		System.out.println("\nVérification des quantités d'exemplaires pour toutes les cartes: " + cartes2.checkCount() + "\n\n");
 	}
 
 }

@@ -59,12 +59,26 @@ public class Utils {
 		return listeCons;
 	}
 	
-	public static <T> boolean verifierRassemblement (List <T> liste) {
-		ListIterator <T> it1 = liste.listIterator();
-		ListIterator <T> it2 = liste.listIterator();
+	public static <T> boolean verifierRassemblement(List <T> liste) {
+		List <T> parcours = new LinkedList<>();
+		ListIterator <T> iter = liste.listIterator();
+		if (!iter.hasNext()) {
+			return true;
+		}
 		
-		
-		
+		T dernier = iter.next();
+		while (iter.hasNext()) {
+			T nextElem = iter.next();
+			
+			if (parcours.contains(nextElem)) {
+				return false;
+			}
+			
+			if (!nextElem.equals(dernier)) {
+				parcours.add(dernier);
+				dernier = nextElem;
+			}
+		}
 		return true;
 	}
 	

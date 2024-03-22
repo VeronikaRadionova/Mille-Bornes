@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import cartes.Probleme.Type;
+import utils.Utils;
 
 public class JeuDeCartes {
 	private Carte[] typesDeCartes = {
@@ -22,6 +23,7 @@ public class JeuDeCartes {
 				listeCartes.add(typesDeCartes[i]);
 			}
 		}
+		listeCartes = Utils.melanger(listeCartes);
 	}
 
 	public List<Carte> getListeCartes() {
