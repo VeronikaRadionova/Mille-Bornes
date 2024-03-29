@@ -14,7 +14,7 @@ import cartes.Parade;
 import cartes.Probleme.Type;
 import jeu.Joueur;
 
-public class TestTP3 {
+public class TestTP3_Joueur {
 	
 	public static void main(String[] args) {
 		System.out.println("TEST d'un méthode 'getKM':\n");
@@ -43,10 +43,10 @@ public class TestTP3 {
         
         
         
-        System.out.println("TEST d'un méthode 'getLimite':\n");
+        System.out.println("TEST d'un méthode 'donnerLimitationVitesse':\n");
         
         System.out.println("Pile Limite de " + bob + " est vide");
-        System.out.println("Valeur getLimite(): " + bob.getLimite() + "\n");
+        System.out.println("Valeur getLimite(): " + bob.donnerLimitationVitesse() + "\n");
         
         // ajout des cartes Limite dans le sabot
         sabot.add(new DebutLimite(2));
@@ -58,59 +58,17 @@ public class TestTP3 {
         carte = bob.prendreCarte(sabot);
         
         System.out.println("Carte prise par " + bob + ": " + carte);
-        System.out.println("Valeur getLimite(): " + bob.getLimite() + "\n");
+        System.out.println("Valeur getLimite(): " + bob.donnerLimitationVitesse() + "\n");
        
         carte = bob.prendreCarte(sabot);
         System.out.println("Carte prise par " + bob + ": " + carte);
-        System.out.println("Valeur getLimite(): " + bob.getLimite() + "\n");
+        System.out.println("Valeur getLimite(): " + bob.donnerLimitationVitesse() + "\n");
         
         carte = bob.prendreCarte(sabot);
         bob.prendreCarte(sabot);
         System.out.println(bob + " possède une carte: " + carte);
-        System.out.println("Valeur getLimite(): " + bob.getLimite() + "\n\n");
+        System.out.println("Valeur getLimite(): " + bob.donnerLimitationVitesse() + "\n\n");
         
+	} 
         
-        System.out.println("TEST d'un méthode 'estBloque':\n");
-        
-        //test unitaire avec Bob
-        System.out.println("TEST avec Bob qui possède déjà quelque carte: " + bob.estBloque() + "\n");
-        
-        // nouveau joueur pour ne pas mélanger avec las cartes de Bob 
-        Joueur tom = new Joueur("Tom");
-        
-        sabot.add(new Attaque(1, Type.FEU));
-        sabot.add(new Botte(1, Type.FEU));
-        sabot.add(new Attaque(1, Type.ACCIDENT));
-        sabot.add(new Botte(1, Type.ACCIDENT));
-        sabot.add(new Attaque(1, Type.ESSENCE));
-        sabot.add(new Botte(1, Type.ESSENCE));
-        sabot.add(new Parade(1, Type.FEU));
-        
-        carte = tom.prendreCarte(sabot);
-		System.out.println(tom.estBloque());
-		
-		carte = tom.prendreCarte(sabot);
-		System.out.println(tom.estBloque());
-
-		carte = tom.prendreCarte(sabot);
-		System.out.println(tom.estBloque());
-
-		carte = tom.prendreCarte(sabot);
-		System.out.println(tom.estBloque());
-		
-		carte = tom.prendreCarte(sabot);
-		System.out.println(tom.estBloque());
-
-		carte = tom.prendreCarte(sabot);
-		System.out.println(tom.estBloque());
-		
-		// On efface les bottes et on ajoute un feu vert
-		Set<Botte> bottes = tom.getEnsembleBotte();
-		bottes.clear();
-		System.out.println(tom.estBloque());
-        
-		carte = tom.prendreCarte(sabot);
-		System.out.println(tom.estBloque());
-	}
-
 }

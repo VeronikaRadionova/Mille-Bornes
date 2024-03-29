@@ -17,19 +17,13 @@ import cartes.Probleme.Type;
 
 public class Joueur {
 	private String nom;
-	private List <Limite> pileLimite;
-	private List <Bataille> pileBataille;
-	private List <Borne> collectionBorne;
-	private Set <Botte> ensembleBotte;
+	private ZoneDeJeu zone;
 	private MainAsListe main;
 
 
 	public Joueur(String nom) {
 		this.nom = nom;
-		pileLimite = new ArrayList<Limite>();
-		pileBataille = new ArrayList<Bataille>();
-		collectionBorne = new ArrayList<Borne>();
-		ensembleBotte = new HashSet<Botte>();
+		this.zone = new ZoneDeJeu();
 		this.main = new MainAsListe();
 	}
 
@@ -37,27 +31,10 @@ public class Joueur {
 	public String getNom() {
 		return nom;
 	}
-
-
-	public List<Limite> getPileLimite() {
-		return pileLimite;
+	
+	public ZoneDeJeu getZone() {
+		return zone;
 	}
-
-
-	public List<Bataille> getPileBataille() {
-		return pileBataille;
-	}
-
-
-	public List<Borne> getCollectionBorne() {
-		return collectionBorne;
-	}
-
-
-	public Set<Botte> getEnsembleBotte() {
-		return ensembleBotte;
-	}
-
 
 	public MainAsListe getMain() {
 		return main;
@@ -93,16 +70,16 @@ public class Joueur {
 		
 		
 		if (carte instanceof Limite) {
-			pileLimite.add((Limite) carte);
+			zone.getPileLimite().add((Limite) carte);
 		} 
 		else if (carte instanceof Bataille) {
-			pileBataille.add((Bataille) carte);
+			zone.getPileBataille().add((Bataille) carte);
 		} 
 		else if (carte instanceof Borne) {
-			collectionBorne.add((Borne) carte);
+			zone.getCollectionBorne().add((Borne) carte);
 		} 
 		else if (carte instanceof Botte) {
-			ensembleBotte.add((Botte) carte);
+			zone.getEnsembleBotte().add((Botte) carte);
 		}
 		
 		return carte;
@@ -110,14 +87,14 @@ public class Joueur {
 	
 	public int getKM() {
 		int kmParcourus = 0;
-		for (Borne borne : collectionBorne) {
+		for (Borne borne : zone.getCollectionBorne()) {
 			kmParcourus += borne.getKm();
 		}
 		return kmParcourus;
 	}
 	
 	public boolean possedeBotteType (Type type) {
-		for (Botte botte : ensembleBotte) {
+		for (Botte botte : zone.getEnsembleBotte()) {
 			if (botte.getType() == type) {
 				return true;
 			}
@@ -125,13 +102,15 @@ public class Joueur {
 		return false;
 	}
 	
-	public int getLimite() {
-		if (pileLimite.isEmpty()) { 
+	public int donnerLimitationVitesse() {
+		List <Limite> pL = zone.getPileLimite();
+		
+		if (pL.isEmpty()) { 
 			return 200; 
 		}
 		
-		Carte sommetPile = pileLimite.get(pileLimite.size() - 1);
-		if ((sommetPile instanceof FinLimite) || possedeBotteType(Type.FEU)) {
+		Carte sommetPile = pL.get(pL.size() - 1);
+		if ((sommetPile instanceof FinLimite) || sommetPile == Cartes.PRIORITAIRE) {
 			return 200;
 		}
 		return 50;
@@ -139,20 +118,22 @@ public class Joueur {
 	}
 	
 	public boolean estBloque() {
+		List <Bataille> pB = zone.getPileBataille();
 		boolean prioritaire = possedeBotteType(Type.FEU);
-		if (pileBataille.isEmpty() && prioritaire) {
+		
+		if (pB.isEmpty() && prioritaire) {
 			return false;
 		}
 		
-		Bataille sommetPile = pileBataille.get(pileBataille.size() - 1);
+		Bataille sommetPile = pB.get(pB.size() - 1);
 		
-		if (sommetPile.equals(new Parade(1, Type.FEU))) {
+		if (sommetPile.equals(Cartes.FEU_VERT)) {
 			return false;
 		} else if (prioritaire) {
 			if (sommetPile instanceof Parade) {
 				return false;
 			}
-			if (sommetPile.equals(new Attaque(1, Type.FEU))) {
+			if (sommetPile.equals(Cartes.FEU_ROUGE)) {
 				return false;
 			} else if (possedeBotteType(sommetPile.getType())) {
 				return false;
@@ -161,6 +142,77 @@ public class Joueur {
 		
 		return true;
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public boolean estBloque3() {
+		List <Bataille> pB = zone.getPileBataille();
+		Set <Botte> eB = zone.getEnsembleBotte();
+		boolean prioritaire = eB.contains(Cartes.PRIORITAIRE);
+		
+		if (pB.isEmpty() && prioritaire) {
+			return false;
+		}
+		
+		Bataille sommetPile = pB.get(pB.size() - 1);
+		
+		if (sommetPile.equals(Cartes.FEU_VERT)) {
+			return false;
+		} else if (prioritaire) {
+			if (sommetPile instanceof Parade) {
+				return false;
+			}
+			if (sommetPile.equals(Cartes.FEU_ROUGE)) {
+				return false;
+			} else if (eB.contains(new Botte(1, sommetPile.getType()))) {
+				return false;
+			}
+		}
+		
+		return true;
+		
+	}
+	
+	public boolean estBloque2() {
+		List <Bataille> pB = zone.getPileBataille();
+		Set <Botte> eB = zone.getEnsembleBotte();
+		boolean prioritaire = eB.contains(Cartes.PRIORITAIRE);
+		
+		if (pB.isEmpty()) {
+			if (prioritaire) {
+				return false;
+			}
+		} else {
+			Bataille sommetPile = pB.get(pB.size() - 1);
+			
+			if (prioritaire) {
+				if (sommetPile instanceof Parade) {
+					return false;
+				}
+				
+				if (sommetPile instanceof Attaque) {
+					if (sommetPile.equals(Cartes.FEU_ROUGE)) {
+						return false;
+					} else if (eB.contains(new Botte (1, sommetPile.getType()))) {
+						return false;
+					}
+				}
+			} else {
+				if (sommetPile.equals(Cartes.FEU_VERT)) {
+					return false;
+				}
+			}
+		}
+		
+		return true;
+	}
+	
 	
 	
 
