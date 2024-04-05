@@ -1,13 +1,14 @@
 package testsFonctionnels;
 
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Set;
 
 import cartes.Attaque;
 import cartes.Botte;
 import cartes.Carte;
-import cartes.Parade;
+//import cartes.Parade;
 import cartes.Probleme.Type;
 import jeu.Cartes;
 import jeu.Joueur;

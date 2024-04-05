@@ -31,15 +31,15 @@ public class TestTP3_Joueur {
 		// test unitaire du méthode getKM()
         Carte carte = bob.prendreCarte(sabot);
         System.out.println("Carte prise par " + bob + ": " + carte);
-        System.out.println("Nombre km parcourus par " + bob + ": " + bob.getKM() + "\n\n");
+        System.out.println("Nombre km parcourus par " + bob + ": " + bob.donnerKmParcourus() + "\n\n");
         
         // test de getKM() avec plusieurs cartes prises:
         while (!sabot.isEmpty()) {
         	Carte carte1 = bob.prendreCarte(sabot);
             System.out.println("Carte prise par " + bob + ": " + carte1);
-            System.out.println("Nombre km parcourus par " + bob + ": " + bob.getKM() + "\n");
+            System.out.println("Nombre km parcourus par " + bob + ": " + bob.donnerKmParcourus() + "\n");
         }
-        System.out.println("Bob a parcouru " + bob.getKM() + "km\n\n");
+        System.out.println("Bob a parcouru " + bob.donnerKmParcourus() + "km\n\n");
         
         
         

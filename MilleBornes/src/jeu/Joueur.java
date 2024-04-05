@@ -1,7 +1,8 @@
 package jeu;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+//import java.util.ArrayList;
+
+//import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -85,7 +86,7 @@ public class Joueur {
 		return carte;
 	}
 	
-	public int getKM() {
+	public int donnerKmParcourus() {
 		int kmParcourus = 0;
 		for (Borne borne : zone.getCollectionBorne()) {
 			kmParcourus += borne.getKm();
@@ -117,7 +118,7 @@ public class Joueur {
 		
 	}
 	
-	public boolean estBloque() {
+	public boolean estBloque1() {
 		List <Bataille> pB = zone.getPileBataille();
 		boolean prioritaire = possedeBotteType(Type.FEU);
 		
@@ -146,12 +147,7 @@ public class Joueur {
 	
 	
 	
-	
-	
-	
-	
-	
-	public boolean estBloque3() {
+	public boolean estBloque() {
 		List <Bataille> pB = zone.getPileBataille();
 		Set <Botte> eB = zone.getEnsembleBotte();
 		boolean prioritaire = eB.contains(Cartes.PRIORITAIRE);
@@ -168,51 +164,31 @@ public class Joueur {
 			if (sommetPile instanceof Parade) {
 				return false;
 			}
-			if (sommetPile.equals(Cartes.FEU_ROUGE)) {
-				return false;
-			} else if (eB.contains(new Botte(1, sommetPile.getType()))) {
-				return false;
-			}
-		}
-		
-		return true;
-		
-	}
-	
-	public boolean estBloque2() {
-		List <Bataille> pB = zone.getPileBataille();
-		Set <Botte> eB = zone.getEnsembleBotte();
-		boolean prioritaire = eB.contains(Cartes.PRIORITAIRE);
-		
-		if (pB.isEmpty()) {
-			if (prioritaire) {
-				return false;
-			}
-		} else {
-			Bataille sommetPile = pB.get(pB.size() - 1);
 			
-			if (prioritaire) {
-				if (sommetPile instanceof Parade) {
+			if (sommetPile instanceof Attaque) {
+				if (sommetPile.equals(Cartes.FEU_ROUGE)) {
 					return false;
 				}
 				
-				if (sommetPile instanceof Attaque) {
-					if (sommetPile.equals(Cartes.FEU_ROUGE)) {
-						return false;
-					} else if (eB.contains(new Botte (1, sommetPile.getType()))) {
+				/*for (Botte botte : eB) {
+					if (botte.getType() == sommetPile.getType()) {
 						return false;
 					}
+				}*/
+				for (Botte botte : eB) {
+					System.out.println("AAAAAAA" + botte.equals(new Botte(1, sommetPile.getType())));
 				}
-			} else {
-				if (sommetPile.equals(Cartes.FEU_VERT)) {
+				
+				
+				if (eB.contains(new Botte(1, sommetPile.getType()))) {
 					return false;
 				}
 			}
 		}
 		
 		return true;
+		
 	}
-	
 	
 	
 
