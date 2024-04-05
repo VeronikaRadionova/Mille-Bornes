@@ -18,7 +18,7 @@ import cartes.Probleme.Type;
 
 public class Joueur {
 	private String nom;
-	private ZoneDeJeu zone;
+	private static ZoneDeJeu zone;
 	private MainAsListe main;
 
 
@@ -86,7 +86,7 @@ public class Joueur {
 		return carte;
 	}
 	
-	public int donnerKmParcourus() {
+	public static int donnerKmParcourus() {
 		int kmParcourus = 0;
 		for (Borne borne : zone.getCollectionBorne()) {
 			kmParcourus += borne.getKm();
@@ -103,7 +103,7 @@ public class Joueur {
 		return false;
 	}
 	
-	public int donnerLimitationVitesse() {
+	public static int donnerLimitationVitesse() {
 		List <Limite> pL = zone.getPileLimite();
 		
 		if (pL.isEmpty()) { 
@@ -146,8 +146,8 @@ public class Joueur {
 	
 	
 	
-	
-	public boolean estBloque() {
+	/* fonction qui ne veut pas marcher */
+	public static boolean estBloque() {
 		List <Bataille> pB = zone.getPileBataille();
 		Set <Botte> eB = zone.getEnsembleBotte();
 		boolean prioritaire = eB.contains(Cartes.PRIORITAIRE);
@@ -170,15 +170,16 @@ public class Joueur {
 					return false;
 				}
 				
+				// avec cette partie au lieu de celle qui est en bas - ça marche
 				/*for (Botte botte : eB) {
-					if (botte.getType() == sommetPile.getType()) {
+					if (botte.getType().equals(sommetPile.getType())) {
 						return false;
 					}
 				}*/
+				
 				for (Botte botte : eB) {
 					System.out.println("AAAAAAA" + botte.equals(new Botte(1, sommetPile.getType())));
 				}
-				
 				
 				if (eB.contains(new Botte(1, sommetPile.getType()))) {
 					return false;
