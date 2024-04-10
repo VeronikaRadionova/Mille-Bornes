@@ -1,6 +1,8 @@
 package jeu;
 
+import cartes.Attaque;
 import cartes.Carte;
+import cartes.DebutLimite;
 
 public class Coup {
 	private Carte carte;
@@ -21,6 +23,11 @@ public class Coup {
 		return jCible;
 	}
 	
-	
+	public boolean estValide(Joueur joueur) { // mojet tut ne nado joueur pisat'
+		if (joueur.getZone().estDepotAutorise(carte) && (carte instanceof Attaque || carte instanceof DebutLimite)) {
+			return true;
+		}
+		return false;
+	}
 
 }

@@ -1,5 +1,7 @@
 package cartes;
 
+import java.util.Objects;
+
 public class Botte extends Probleme {
 
 	public Botte(int nombre, Type type) {
@@ -28,5 +30,10 @@ public class Botte extends Probleme {
 		}
 		return false;
 	}
-
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(type);
+	}
+	
 }

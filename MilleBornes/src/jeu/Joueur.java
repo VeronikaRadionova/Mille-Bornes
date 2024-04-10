@@ -1,5 +1,7 @@
 package jeu;
 
+import java.util.HashSet;
+
 //import java.util.ArrayList;
 
 //import java.util.HashSet;
@@ -11,6 +13,7 @@ import cartes.Bataille;
 import cartes.Borne;
 import cartes.Botte;
 import cartes.Carte;
+import cartes.DebutLimite;
 import cartes.FinLimite;
 import cartes.Limite;
 import cartes.Parade;
@@ -118,35 +121,7 @@ public class Joueur {
 		
 	}
 	
-	public boolean estBloque1() {
-		List <Bataille> pB = zone.getPileBataille();
-		boolean prioritaire = possedeBotteType(Type.FEU);
-		
-		if (pB.isEmpty() && prioritaire) {
-			return false;
-		}
-		
-		Bataille sommetPile = pB.get(pB.size() - 1);
-		
-		if (sommetPile.equals(Cartes.FEU_VERT)) {
-			return false;
-		} else if (prioritaire) {
-			if (sommetPile instanceof Parade) {
-				return false;
-			}
-			if (sommetPile.equals(Cartes.FEU_ROUGE)) {
-				return false;
-			} else if (possedeBotteType(sommetPile.getType())) {
-				return false;
-			}
-		}
-		
-		return true;
-	}
 	
-	
-	
-	/* fonction qui ne veut pas marcher */
 	public static boolean estBloque() {
 		List <Bataille> pB = zone.getPileBataille();
 		Set <Botte> eB = zone.getEnsembleBotte();
@@ -170,17 +145,6 @@ public class Joueur {
 					return false;
 				}
 				
-				// avec cette partie au lieu de celle qui est en bas - ça marche
-				/*for (Botte botte : eB) {
-					if (botte.getType().equals(sommetPile.getType())) {
-						return false;
-					}
-				}*/
-				
-				for (Botte botte : eB) {
-					System.out.println("AAAAAAA" + botte.equals(new Botte(1, sommetPile.getType())));
-				}
-				
 				if (eB.contains(new Botte(1, sommetPile.getType()))) {
 					return false;
 				}
@@ -188,7 +152,31 @@ public class Joueur {
 		}
 		
 		return true;
+	}
+	
+	public Set<Coup> coupsPossibles(Set<Joueur> participants) {
+		Set<Coup> coupsValides = new HashSet<Coup>();
 		
+		List <Bataille> pB = zone.getPileBataille();
+		List <Limite> pL = zone.getPileLimite();
+		Coup coup;
+		
+		for (Joueur j : participants) {
+			for (Bataille a : pB) {
+				coup = new Coup(a, j);
+				if (coup.estValide(j)) {
+					coupsValides.add(coup);
+				}
+			}
+			for (Limite dl : pL) {
+				coup = new Coup(dl, j);
+				if (coup.estValide(j)) {
+					coupsValides.add(coup);
+				}
+			}
+		}
+		
+		return coupsValides;
 	}
 	
 	

@@ -47,6 +47,60 @@ public class ZoneDeJeu {
 		return ensembleBotte;
 	}
 	
+	boolean estDepotLimiteAutorise(Limite carte) {
+		if (carte instanceof DebutLimite) {
+			Limite sommetPile = pileLimite.get(pileLimite.size() - 1);
+			
+			if (!ensembleBotte.contains(Cartes.PRIORITAIRE) && (pileLimite.isEmpty() || sommetPile instanceof FinLimite)) {
+				return true;
+			}
+		}
+		
+		if (carte instanceof FinLimite) {
+			Limite sommetL = pileLimite.get(pileLimite.size() - 1);
+			
+			if (!ensembleBotte.contains(Cartes.PRIORITAIRE) && !(pileLimite.isEmpty() || sommetL instanceof FinLimite)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	boolean estDepotBatailleAutorise(Bataille carte){
+		if (!ensembleBotte.contains(new Botte(1, ((Bataille)carte).getType()))) {
+			return true;
+		}
+		
+		if (carte instanceof Attaque && !Joueur.estBloque()) {
+			return true;
+		}
+		
+		
+		if (carte instanceof Parade) {
+			Bataille sommetB = pileBataille.get(pileBataille.size() - 1);
+			
+			if (carte.equals(Cartes.FEU_VERT)) {
+				if (pileBataille.isEmpty()) {
+					return true;
+				}
+				
+				if (sommetB.equals(Cartes.FEU_ROUGE)) {
+					return true;
+				}
+				
+				if (sommetB instanceof Parade && !sommetB.equals(Cartes.FEU_VERT)) {
+					return true;
+				}
+			} else {
+				if (!pileBataille.isEmpty() && sommetB instanceof Attaque && sommetB.equals(new Attaque(1, ((Parade)carte).getType()))) {
+					return true;
+				}
+			}
+				
+		}
+		return false;
+	}
+	
 	
 	boolean estDepotAutorise(Carte carte) {
 		if (carte instanceof Botte) {
@@ -55,44 +109,21 @@ public class ZoneDeJeu {
 		
 		if (carte instanceof Borne) {
 			Borne borne = (Borne) carte;
+			
 			if (!Joueur.estBloque() && borne.getKm() <= Joueur.donnerLimitationVitesse() && Joueur.donnerKmParcourus() <= 1000) {
 				return true;
 			}
 		}
 		
-		if (carte instanceof DebutLimite) {
-			if (!ensembleBotte.contains(Cartes.PRIORITAIRE) && pileLimite.isEmpty()) {
-				return true;
-			}
-		}
-		
-		if (carte instanceof FinLimite) {
-			if (!ensembleBotte.contains(Cartes.PRIORITAIRE) && !pileLimite.isEmpty()) {
+		if (carte instanceof Limite) {
+			if (estDepotLimiteAutorise((Limite)carte)) {
 				return true;
 			}
 		}
 		
 		if (carte instanceof Bataille) {
-			Bataille top = pileBataille.get(pileBataille.size() - 1);
-			
-			if (top == null) {
-				if (ensembleBotte.contains(Cartes.PRIORITAIRE) || carte == Cartes.FEU_ROUGE) {
-					top = Cartes.FEU_VERT;
-				} else {
-					top = Cartes.FEU_ROUGE;
-				}
-			}
-			
-			if (top instanceof Attaque && !ensembleBotte.contains(top.getType())) {
-				if (carte.equals(new Parade(1, top.getType()))) {
-					return true;
-				}
-			}
-			
-			if (top instanceof Parade) {
-				if (/* qqch avec botte déposée */) {
-					return true;
-				}
+			if (estDepotBatailleAutorise((Bataille)carte)) {
+				return true;
 			}
 		}
 		

@@ -1,5 +1,7 @@
 package cartes;
 
+import java.util.Objects;
+
 public abstract class Probleme extends Carte{
 	public enum Type {FEU, ESSENCE, CREVAISON, ACCIDENT};
 	protected Type type;
@@ -12,5 +14,6 @@ public abstract class Probleme extends Carte{
 	public Type getType() {
 		return type;
 	}
-
+	
+	
 }
