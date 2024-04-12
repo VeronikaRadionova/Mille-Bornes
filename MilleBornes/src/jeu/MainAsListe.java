@@ -32,6 +32,12 @@ public class MainAsListe implements Main {
 		listeMain.remove(carte);
 	}
 
+	public List<Carte> getListeMain() {
+		return listeMain;
+	}
+	
+	
+
 	
 
 }

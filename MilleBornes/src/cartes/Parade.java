@@ -1,5 +1,7 @@
 package cartes;
 
+import java.util.Objects;
+
 public class Parade extends Bataille{
 
 	public Parade(int nombre, Type type) {
@@ -27,6 +29,11 @@ public class Parade extends Bataille{
 			return type == parade.getType();
 		}
 		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(type);
 	}
 
 }

@@ -47,19 +47,71 @@ public class ZoneDeJeu {
 		return ensembleBotte;
 	}
 	
-	boolean estDepotLimiteAutorise(Limite carte) {
-		if (carte instanceof DebutLimite) {
-			Limite sommetPile = pileLimite.get(pileLimite.size() - 1);
+	/*public boolean estBloque() {
+		return estBloque();
+	}*/
+	
+	public boolean estBloque() {
+		List <Bataille> pB = getPileBataille();
+		Set <Botte> eB = getEnsembleBotte();
+		boolean prioritaire = eB.contains(Cartes.PRIORITAIRE);
+		
+		if (pB.isEmpty() && prioritaire) {
+			return false;
+		}
+		
+		Bataille sommetPile = pB.get(pB.size() - 1);
+		
+		if (sommetPile.equals(Cartes.FEU_VERT)) {
+			return false;
+		} else if (prioritaire) {
+			if (sommetPile instanceof Parade) {
+				return false;
+			}
 			
+			if (sommetPile instanceof Attaque) {
+				if (sommetPile.equals(Cartes.FEU_ROUGE)) {
+					return false;
+				}
+				
+				if (eB.contains(new Botte(1, sommetPile.getType()))) {
+					return false;
+				}
+			}
+		}
+		
+		return true;
+	}
+	
+	
+	/*public void deposer(Botte carte) {
+		ensembleBotte.add((Botte)carte);
+	}
+	
+	public void deposer(Borne carte) {
+		collectionBorne.add((Borne)carte);
+	}
+	
+	public void deposer(Limite carte) {
+		pileLimite.add((Limite)carte);
+	}
+	
+	public void deposer(Bataille carte) {
+		pileBataille.add((Bataille)carte);
+	}*/
+	
+	
+	boolean estDepotLimiteAutorise(Limite carte) {
+		Limite sommetPile = pileLimite.get(pileLimite.size() - 1);
+		
+		if (carte instanceof DebutLimite) {
 			if (!ensembleBotte.contains(Cartes.PRIORITAIRE) && (pileLimite.isEmpty() || sommetPile instanceof FinLimite)) {
 				return true;
 			}
 		}
 		
 		if (carte instanceof FinLimite) {
-			Limite sommetL = pileLimite.get(pileLimite.size() - 1);
-			
-			if (!ensembleBotte.contains(Cartes.PRIORITAIRE) && !(pileLimite.isEmpty() || sommetL instanceof FinLimite)) {
+			if (ensembleBotte.contains(Cartes.PRIORITAIRE) || (pileLimite.isEmpty() || sommetPile instanceof FinLimite)) {
 				return true;
 			}
 		}
@@ -67,11 +119,12 @@ public class ZoneDeJeu {
 	}
 	
 	boolean estDepotBatailleAutorise(Bataille carte){
+		// problème !!!
 		if (!ensembleBotte.contains(new Botte(1, ((Bataille)carte).getType()))) {
-			return true;
+			return true; 
 		}
 		
-		if (carte instanceof Attaque && !Joueur.estBloque()) {
+		if (carte instanceof Attaque && !estBloque()) {
 			return true;
 		}
 		
@@ -110,24 +163,53 @@ public class ZoneDeJeu {
 		if (carte instanceof Borne) {
 			Borne borne = (Borne) carte;
 			
-			if (!Joueur.estBloque() && borne.getKm() <= Joueur.donnerLimitationVitesse() && Joueur.donnerKmParcourus() <= 1000) {
+			if (!estBloque() && borne.getKm() <= Joueur.donnerLimitationVitesse() && Joueur.donnerKmParcourus() <= 1000) {
 				return true;
 			}
 		}
 		
 		if (carte instanceof Limite) {
-			if (estDepotLimiteAutorise((Limite)carte)) {
-				return true;
-			}
+			return estDepotLimiteAutorise((Limite)carte);
 		}
 		
 		if (carte instanceof Bataille) {
-			if (estDepotBatailleAutorise((Bataille)carte)) {
-				return true;
-			}
+			return estDepotBatailleAutorise((Bataille)carte);
 		}
 		
 		return false;
 	}
+	
+	public boolean deposer(Carte carte) {
+		if (!estDepotAutorise(carte)) {
+			return false;
+		} else {
+			if (carte instanceof Limite) {
+				pileLimite.add((Limite)carte);
+			} 
+			else if (carte instanceof Bataille) {
+				pileBataille.add((Bataille)carte);
+			} 
+			else if (carte instanceof Borne) {
+				collectionBorne.add((Borne)carte);
+			} 
+			else if (carte instanceof Botte) {
+				ensembleBotte.add((Botte)carte);
+				
+				Attaque attaque = new Attaque (1, ((Botte)carte).getType());
+				if (pileBataille.contains(attaque)) {
+					pileBataille.remove(attaque);
+				}
+			}
+			return true;
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

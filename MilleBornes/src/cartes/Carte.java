@@ -15,6 +15,9 @@ public abstract class Carte {
 	public String toString() {
 		return "Carte [nombre =" + nombre + "]";
 	}
+
+	
+
 	
 	
 	

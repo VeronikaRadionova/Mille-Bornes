@@ -63,6 +63,28 @@ public class Joueur {
 		// post-condition est déjà dans le méthode prendre
 	}
 	
+	/*public void deposer(Limite carte) {
+		zone.deposer(carte);
+	}
+	
+	public void deposer(Bataille carte) {
+		zone.deposer(carte);;
+	}
+	
+	public void deposer(Borne carte) {
+		zone.deposer(carte);;
+	}
+	
+	public void deposer(Botte carte) {
+		zone.deposer(carte);;
+	}*/
+	
+	
+	public boolean deposer(Carte carte) {
+		return zone.deposer(carte);
+	}
+	
+	
 	public Carte prendreCarte(List<Carte> sabot) {
 		if (sabot.isEmpty()) {
 			return null;
@@ -72,19 +94,20 @@ public class Joueur {
 		sabot.remove(carte);
 		donner(carte);
 		
+		deposer(carte);
 		
-		if (carte instanceof Limite) {
-			zone.getPileLimite().add((Limite) carte);
+		/*if (carte instanceof Limite) {
+			deposer((Limite)carte);
 		} 
 		else if (carte instanceof Bataille) {
-			zone.getPileBataille().add((Bataille) carte);
+			deposer((Bataille)carte);
 		} 
 		else if (carte instanceof Borne) {
-			zone.getCollectionBorne().add((Borne) carte);
+			deposer((Borne)carte);
 		} 
 		else if (carte instanceof Botte) {
-			zone.getEnsembleBotte().add((Botte) carte);
-		}
+			deposer((Botte)carte);
+		}*/
 		
 		return carte;
 	}
@@ -177,6 +200,16 @@ public class Joueur {
 		}
 		
 		return coupsValides;
+	}
+	
+	public Set<Coup> coupsDefausse() {
+		Set<Coup> coupsDefausses = new HashSet<Coup>();
+		
+		for (Carte carte : main.getListeMain()) {
+			coupsDefausses.add(new Coup(carte, null));
+		}
+		
+		return coupsDefausses;
 	}
 	
 	
